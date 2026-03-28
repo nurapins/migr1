@@ -11,14 +11,6 @@ async function init() {
         "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland"
     ]);
 
-    let areachart;
-
-    d3.csv("data/visa_2023_region.csv", d3.autoType).then(function(data){
-        areachart = new SlicedRect("sliced-rect", data);
-
-        areachart.initVis();
-    })
-
     const salaryVis = new SalaryVis("salary-vis", geoData, salaryData);
     window.salaryVis = salaryVis; // Make it globally accessible for MapVis
 
@@ -197,6 +189,9 @@ async function init() {
     animatedSections.forEach(section => observer.observe(section));
 
     initLandingVis();
+
+    let feeVis = new FeeVis("fee-vis-chart", geoData, rawData);
+    await feeVis.initVis();
 }
 
 function initLandingVis() {

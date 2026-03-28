@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -90,26 +91,25 @@
     </div>
 </section>
 
-<section class="slicedRect">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row justify-content-center">
-                    <div class="align-self-center">
-                        <h1>The Total Cost On Visa For Each Country</h1>
-                    </div>
-                </div>
-                <div class="row justify-content-center" style="height: 60vh">
-                    <div class="align-self-center" id="sliced-rect" style="height: 100%; width: 100%"></div>
-                    <div id="tooltip"></div>
-                </div>
-                <div class="row" style="height: 60vh">
-                    <div id="legend"></div>
-                </div>
+<section id="fee-vis-section" style="min-height: 100vh; display: flex; flex-direction: column; background: #000000">
+    <div class="row" style="height: 10vh">
+        <h2 id="fee-vis-title" class="mt-4 text-center" style="color: #ffffff; font-family: 'Playfair Display', serif">Total Fee Received by EU Countries</h2>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="row justify-content-center" style="display: flex; flex-direction: column; min-height: 70vh">
+                <div id="fee-vis-chart" class="align-self-center" style="flex: 1"></div>
+            </div>
+            <div class="row justify-content-center" style="height: 10vh">
+                <div id="fee-vis-legend" class="align-self-center" style="height: 100%;"></div>
+            </div>
+            <div class="row justify-content-center" style="height: 10vh">
+                <div id="fee-vis-timeline" class="align-self-center" style="height: 100%;"></div>
             </div>
         </div>
     </div>
 </section>
+
 <section class="gates">
     <div class="wrap">
         <h1>Visa Gate Skyline</h1>
@@ -164,6 +164,7 @@
 <script src="js/mapVis.js"></script>
 <script src="js/salaryVis.js"></script>
 <script src="js/slicedRect.js"></script>
+<script src="js/feeVis.js"></script>
 <script src="js/gates.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 

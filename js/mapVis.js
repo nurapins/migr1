@@ -184,6 +184,17 @@ class MapVis {
                     // Start the fly transition
                     vis.flyToSalary(d, this);
                 }
+                else if (window.feeVis && category === "Schengen") {
+                    window.feeVisRegion = countryName;
+                    window.feeVis.updateVis(window.feeVisRegion, window.feeVisLevel);
+
+                    const target = document.getElementById("fee-vis-section");
+
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
 
         // ── Gradient legend ──

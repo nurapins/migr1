@@ -601,3 +601,16 @@ svg {
 .tooltip strong {
     color: #ffffff;
 }
+
+#fee-vis-year-selector {
+    background: black;
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#fee-vis-year-selector::-webkit-scrollbar {
+    display: none;
+}

@@ -191,6 +191,7 @@ async function init() {
     initLandingVis();
 
     window.feeVis = new FeeVis("fee-vis", geoData, rawData);
+    window.feeVisYear = 2005;
     window.feeVisRegion = "EU";
     window.feeVisLevel = "Country";
     await feeVis.initVis();
@@ -203,13 +204,8 @@ async function init() {
         .text(d => d);
 
     d3.select("#fee-vis-year-selector").on("change", function () {
-        const selectedYear = +this.value;
-
-        feeVis.updateVis(
-            window.feeVisRegion,
-            window.feeVisLevel,
-            selectedYear
-        );
+        window.feeVisYear = +this.value;
+        feeVis.updateVis();
     });
 }
 

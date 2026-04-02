@@ -604,7 +604,6 @@ svg {
 
 #fee-vis-year-selector {
     background: black;
-    appearance: none;
     border: none;
     cursor: pointer;
     scrollbar-width: none;
@@ -613,4 +612,23 @@ svg {
 
 #fee-vis-year-selector::-webkit-scrollbar {
     display: none;
+}
+
+#fee-vis-region-selector .pill {
+    padding: 6px 12px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Playfair Display', serif;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+#fee-vis-region-selector .pill:hover {
+    background: #303030;
+}
+
+#fee-vis-region-selector .pill.selected {
+    background: #4a4a4a;
 }

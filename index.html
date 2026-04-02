@@ -101,15 +101,14 @@
                 <div class="align-self-center" style="flex: 1"></div>
             </div>
         </div>
-        <div class="col-3 mt-5 offset-1">
-            <div id="fee-vis-info">
-                <h2 id="the-many" style="font-family: 'Playfair Display', serif; color: white">Continents</h2>
-                <h2 id="the-relationship" style="font-family: 'Playfair Display', serif; color: white">Paid To</h2>
-                <h2 id="the-one" style="font-family: 'Playfair Display', serif; color: white">EU</h2>
-                <label style="font-family: 'Playfair Display', serif; color: white; font-size: 32px">In
-                    <select id="fee-vis-year-selector"></select>
-                </label>
-            </div>
+        <div class="col-4 mt-5" style="display: flex; flex-direction: column;">
+            <label style="font-family: 'Playfair Display', serif; color: white; font-size: 24px">In
+                <select id="fee-vis-year-selector" class="fee-vis-selector"></select>
+            </label>
+            <h4 id="the-many" style="font-family: 'Playfair Display', serif; color: white">Countries</h4>
+            <h4 id="the-one" style="font-family: 'Playfair Display', serif; color: white">Paid To EU</h4>
+            <div id="fee-vis-region-selector" class="mt-5" style="height: 40vh"></div>
+            <h6 id="fee-vis-total" style="font-family: 'Playfair Display', serif; color: white; font-size: 32px">Total: </h6>
         </div>
     </div>
 </section>

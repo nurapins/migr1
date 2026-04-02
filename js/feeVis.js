@@ -1,90 +1,19 @@
-const countryNameMap = {
-    "Russian Federation": "Russia",
-    "United States": "United States of America",
-    "Korea, Republic of": "South Korea",
-    "Moldova, Republic of": "Moldova",
-    "Venezuela, Bolivarian Republic of": "Venezuela",
-    "Iran, Islamic Republic of": "Iran",
-    "Syrian Arab Republic": "Syria",
-    "Viet Nam": "Vietnam",
-    "Lao People's Democratic Republic": "Laos",
-    "Brunei Darussalam": "Brunei",
-    "Bolivia, Plurinational State of": "Bolivia",
-    "Tanzania, United Republic of": "Tanzania",
-    "Czechia": "Czech Republic"
-};
-
-const visaExemptCountries = new Set([
-    "North Macedonia",
-    "former Yugoslav Republic of Macedonia",
-    "Andorra",
-    "United Arab Emirates",
-    "Antigua and Barbuda",
-    "Albania",
-    "Argentina",
-    "Australia",
-    "Bosnia and Herzegovina",
-    "Barbados",
-    "Brunei",
-    "Brazil",
-    "Bahamas",
-    "Canada",
-    "Chile",
-    "Colombia",
-    "Costa Rica",
-    "Dominica",
-    "Micronesia",
-    "Grenada",
-    "Georgia",
-    "Guatemala",
-    "Honduras",
-    "Israel",
-    "Japan",
-    "Kiribati",
-    "Saint Kitts and Nevis",
-    "South Korea",
-    "Korea, Republic of",
-    "Saint Lucia",
-    "Monaco",
-    "Moldova",
-    "Moldova, Republic of",
-    "Montenegro",
-    "Marshall Islands",
-    "Mauritius",
-    "Mexico",
-    "Malaysia",
-    "Nicaragua",
-    "Nauru",
-    "New Zealand",
-    "Panama",
-    "Peru",
-    "Palau",
-    "Paraguay",
-    "Serbia",
-    "Solomon Islands",
-    "Seychelles",
-    "Singapore",
-    "San Marino",
-    "El Salvador",
-    "Timor-Leste",
-    "Tonga",
-    "Trinidad and Tobago",
-    "Tuvalu",
-    "Ukraine",
-    "United Kingdom",
-    "United States",
-    "United States of America",
-    "Uruguay",
-    "Holy See",
-    "Vatican City",
-    "Saint Vincent and the Grenadines",
-    "Venezuela",
-    "Venezuela, Bolivarian Republic of",
-    "Samoa",
-    "Hong Kong SAR",
-    "Macao SAR",
-    "Taiwan",
-    "Kosovo"
+const visaExemptCountryCodes = new Set([
+    "MKD", "MKD", "AND", "ARE", "ATG",
+    "ALB", "ARG", "AUS", "BIH", "BRB",
+    "BRN", "BRA", "BHS", "CAN", "CHL",
+    "COL", "CRI", "DMA", "FSM", "GRD",
+    "GEO", "GTM", "HND", "ISR", "JPN",
+    "KIR", "KNA", "KOR", "KOR", "LCA",
+    "MCO", "MDA", "MDA", "MNE", "MHL",
+    "MUS", "MEX", "MYS", "NIC", "NRU",
+    "NZL", "PAN", "PER", "PLW", "PRY",
+    "SRB", "SLB", "SYC", "SGP", "SMR",
+    "SLV", "TLS", "TON", "TTO", "TUV",
+    "UKR", "GBR", "USA", "USA", "URY",
+    "VAT", "VAT", "VCT", "VEN", "VEN",
+    "WSM", "HKG", "MAC", "TWN", "XKX",
+    "IRL"
 ]);
 
 class FeeVis {
@@ -96,19 +25,19 @@ class FeeVis {
         this.years = new Set(this.rawData.map(d => +d.reporting_year));
         this.schengenCountries = new Set(this.rawData.map(d => d.reporting_state));
 
-        this.countryToContinent = {};
-        this.geoData.features.forEach(d => this.countryToContinent[d.properties.formal_en] = d.properties.continent);
+        this.countryCodeToContinent = {};
+        this.geoData.features.forEach(d => this.countryCodeToContinent[d.properties.iso_a3] = d.properties.continent);
 
         let groupedData = [];
 
         this.rawData
             .filter(d =>
                 !this.schengenCountries.has(d.consulate_country) &&
-                !visaExemptCountries.has(d.consulate_country))
+                !visaExemptCountryCodes.has(d.consulate_country_code))
             .forEach(rd => {
                 let year = rd.reporting_year;
                 let applyingCountry = rd.consulate_country;
-                let applyingContinent = this.countryToContinent[rd.consulate_country];
+                let applyingContinent = this.countryCodeToContinent[rd.consulate_country_code];
                 let schengenCountry = rd.reporting_state;
                 let application = +rd.visitor_visa_applications;
                 let issued = +rd.visitor_visa_issued;
@@ -116,68 +45,32 @@ class FeeVis {
 
                 if (!applyingContinent || application === 0) return;
 
-                let indexCountrySchengen = `${year}|${applyingCountry}|${schengenCountry}`;
-                let indexCountryEU = `${year}|${applyingCountry}|EU`;
-                let indexContinentSchengen = `${year}|${applyingContinent}|${schengenCountry}`;
-                let indexContinentEU = `${year}|${applyingContinent}|EU`;
+                let indexes = [
+                    [applyingCountry, "Country", schengenCountry],
+                    [applyingCountry, "Country", "EU"],
+                    [applyingContinent, "Continent", schengenCountry],
+                    [applyingContinent, "Continent", "EU"],
+                ]
 
-                if (!groupedData[indexCountrySchengen]) {
-                    groupedData[indexCountrySchengen] = {
-                        year: year,
-                        applier: applyingCountry,
-                        level: "Country",
-                        schengenCountry: schengenCountry,
-                        application: application,
-                        issued: issued,
-                        notIssued: notIssued,
-                    };
-                }
+                indexes.forEach(index => {
+                    let key = `${year}|${index[0]}|${index[2]}`;
 
-                if (!groupedData[indexCountryEU]) {
-                    groupedData[indexCountryEU] = {
-                        year: year,
-                        applier: applyingCountry,
-                        level: "Country",
-                        schengenCountry: "EU",
-                        application: 0,
-                        issued: 0,
-                        notIssued: 0,
-                    };
-                }
+                    if (!groupedData[key]) {
+                        groupedData[key] = {
+                            year: year,
+                            applier: index[0],
+                            level: index[1],
+                            schengenCountry: index[2],
+                            application: 0,
+                            issued: 0,
+                            notIssued: 0,
+                        };
+                    }
 
-                if (!groupedData[indexContinentSchengen]) {
-                     groupedData[indexContinentSchengen] = {
-                         year: year,
-                         applier: applyingContinent,
-                         level: "Continent",
-                         schengenCountry: schengenCountry,
-                         application: 0,
-                         issued: 0,
-                         notIssued: 0
-                    };
-                }
-
-                if (!groupedData[indexContinentEU]) {
-                    groupedData[indexContinentEU] = {
-                        year: year,
-                        applier: applyingContinent,
-                        level: "Continent",
-                        schengenCountry: "EU",
-                        application: 0,
-                        issued: 0,
-                        notIssued: 0
-                    };
-                }
-
-                groupedData[indexCountryEU].application += application;
-                groupedData[indexCountryEU].issued += issued;
-                groupedData[indexCountryEU].notIssued += notIssued;
-                groupedData[indexContinentSchengen].application += application;
-                groupedData[indexContinentSchengen].issued += issued;
-                groupedData[indexContinentSchengen].notIssued += notIssued;
-                groupedData[indexContinentEU].application += application;
-                groupedData[indexContinentEU].issued += issued;
-                groupedData[indexContinentEU].notIssued += notIssued;
+                    groupedData[key].application += application;
+                    groupedData[key].issued += issued;
+                    groupedData[key].notIssued += notIssued;
+                });
             });
 
         this.cleanedData = Object.values(groupedData);
@@ -243,7 +136,7 @@ class FeeVis {
             .attr("stroke-width", 2);
 
         vis.legendGroup.selectAll(".tick")
-            .data([0, 1, 2, 3, 4, 5, 6])
+            .data([0, 1, 2, 3, 4, 5])
             .enter()
             .append("line")
             .attr("class", "tick")
@@ -255,7 +148,7 @@ class FeeVis {
             .attr("stroke-width", 2);
 
         vis.labels = vis.legendGroup.selectAll(".label")
-            .data([0, 1, 2, 3, 4, 5, 6])
+            .data([0, 1, 2, 3, 4, 5])
             .enter()
             .append("text")
             .attr("class", "label")
@@ -276,18 +169,48 @@ class FeeVis {
             .attr("width", d => d.width / 10)
             .attr("height", d => d.height / 10);
 
-        vis.updateVis(window.feeVisRegion, window.feeVisLevel);
+        vis.updateVis();
+
+        const container = d3.select("#fee-vis-region-selector");
+
+        container.selectAll("*").remove();
+
+        container
+            .style("display", "flex")
+            .style("flex-wrap", "wrap")
+            .style("gap", "8px")
+            .style("overflow-y", "auto");
+
+        const pills = container.selectAll(".pill")
+            .data(vis.schengenCountries)
+            .enter()
+            .append("div")
+            .attr("class", "pill")
+            .text(d => d);
+
+        pills.on("click", function(event, d) {
+            window.feeVisRegion = d;
+
+            pills.classed("selected", false);
+            d3.select(this).classed("selected", true);
+
+            vis.updateVis();
+        });
     }
 
-    updateVis(region, level, year = 2005, mode = false) {
+    updateVis(mode = false) {
+        let region = window.feeVisRegion;
+        let level = window.feeVisLevel;
+        let year = window.feeVisYear;
         let vis = this;
+
         vis.chart.selectAll("*").remove();
 
         vis.centerX = vis.width / 2;
         vis.centerY = vis.height / 2 - 80;
 
         d3.select("#" + vis.parentElement + "-title").text("The Fee Received by " + region);
-        d3.select("#the-one").text(region);
+        d3.select("#the-one").text("Paid To " + region);
 
         let visData = [];
         if (mode) {}
@@ -321,12 +244,14 @@ class FeeVis {
         }
 
         let totalFee = d3.sum(visData, d => d.fee);
-        let unitFee = celling3M(d3.max(visData, d => d.fee)) / 6;
+        d3.select("#" + vis.parentElement + "-total").text("Total: " + totalFee);
+        let unitFee = celling6M(d3.max(visData, d => d.fee)) / 24;
         let rectData = visData.map(d => {
-            let euro = vis.euro[Math.floor(d.fee / unitFee)];
+            let index = Math.floor(d.fee / unitFee);
+            let euro = vis.euro[d3.min([index, 5])];
             let ratio = euro.ratio;
             let path = euro.path;
-            let size = d.fee / totalFee * vis.gArea / visData.length + 3000;
+            let size = d.fee / totalFee * vis.gArea / visData.length * 8 + 1000;
             return {
                 text: d.applier,
                 fee: Math.round(d.fee / 1000) / 1000 + "M",
@@ -336,9 +261,7 @@ class FeeVis {
             };
         });
 
-
-
-        rectPacking(rectData, vis.centerX, vis.centerY);
+        rectPacking(rectData, vis.width);
 
         vis.chart.selectAll(".vis-image")
             .data(rectData)
@@ -380,13 +303,13 @@ class FeeVis {
         cellText.append("tspan")
             .attr("x", d => d.x + d.width/2)
             .attr("dy", "-0.5em")
-            .style("font-size", d => d3.min([d.width / d.text.length * 1.85, 16]))
+            .style("font-size", d => d3.min([d.width / d.text.length * 1.5, 12]))
             .text(d => d.text);
 
         cellText.append("tspan")
             .attr("x", d => d.x + d.width/2)
-            .attr("dy", "1em")
-            .style("font-size", 16)
+            .attr("dy", "1.25em")
+            .style("font-size", d => d3.min([d.width / d.fee.length * 1.5, 12]))
             .text(d => d.fee);
 
         cells.on("mouseover", function () {
@@ -395,7 +318,7 @@ class FeeVis {
                 .style("opacity", 1);
             d3.select(this).select("rect")
                 .transition().duration(200)
-                .style("opacity", 0.3);
+                .style("opacity", 0.5);
             })
             .on("mouseout", function () {
                 d3.select(this).select("text")
@@ -406,7 +329,7 @@ class FeeVis {
                     .style("opacity", 0);
             });
 
-        vis.labels.data([0, 1, 2, 3, 4, 5, 6])
+        vis.labels.data([0, 1, 2, 3, 4, 5])
             .text(d => {
                 if (unitFee) return d * unitFee / 1000000 + "M";
                 else return "-";
@@ -414,62 +337,28 @@ class FeeVis {
     }
 }
 
-function celling3M(num) {
-    return Math.ceil(num/3000000) * 3000000;
+function celling6M(num) {
+    return Math.ceil(num/6000000) * 6000000;
 }
 
-function isOverlap(a, b, margin) {
-    return !(
-        a.x + a.width + margin < b.x - margin ||
-        a.x - margin > b.x + b.width + margin ||
-        a.y + a.height + margin < b.y - margin ||
-        a.y - margin > b.y + b.height + margin
-    );
-}
+function rectPacking(rects, width, gap = 5) {
+    let currentX = 0;
+    let currentY = 0;
+    let nextRow = 0;
 
-function rectPacking(rects, centerX, centerY, margin = 5) {
-    let placedRects = [[], [], [], []];
-    let index = 0;
-
-    rects.forEach((r, i) => {
-        if (i === 0) {r.x = centerX - r.width - margin; r.y = centerY - r.height - margin; placedRects[i].push(r);}
-        if (i === 1) {r.x = centerX + margin; r.y = centerY - r.height - margin; placedRects[i].push(r);}
-        if (i === 2) {r.x = centerX + margin; r.y = centerY + margin; placedRects[i].push(r);}
-        if (i === 3) {r.x = centerX - r.width - margin; r.y = centerY + margin; placedRects[i].push(r);}
-
-        if (i >= 4) {
-            r.x = centerX - r.width / 2;
-            r.y = centerY - r.height / 2;
-
-            while (placedRects[index % 4].some(pr => isOverlap(pr, r, margin)) &&
-            placedRects[(index+1) % 4].some(pr => isOverlap(pr, r, margin)))
-            {
-                if (index % 4 === 0) r.y--
-                if (index % 4 === 1) r.x++
-                if (index % 4 === 2) r.y++
-                if (index % 4 === 3) r.x--
-            }
-
-            if (placedRects[index % 4].some(pr => isOverlap(pr, r, margin))) {
-                while (placedRects[index % 4].some(pr => isOverlap(pr, r, margin))) {
-                    if (index % 4 === 0) r.x++
-                    if (index % 4 === 1) r.y++
-                    if (index % 4 === 2) r.x--
-                    if (index % 4 === 3) r.y--
-                }
-
-                index++;
-            }
-            else {
-                while (placedRects[(index+1) % 4].some(pr => isOverlap(pr, r, margin))) {
-                    if (index % 4 === 0) r.x--
-                    if (index % 4 === 1) r.y--
-                    if (index % 4 === 2) r.x++
-                    if (index % 4 === 3) r.y++
-                }
-            }
-
-            placedRects[index % 4].push(r);
+    rects.forEach(rect => {
+        if (currentX + rect.width > width) {
+            currentX = 0;
+            currentY = currentY + nextRow + gap;
+            nextRow = rect.height;
         }
+        else {
+            nextRow = d3.max([nextRow, rect.height]);
+        }
+
+        rect.x = currentX;
+        rect.y = currentY;
+
+        currentX = currentX + rect.width + gap;
     });
 }

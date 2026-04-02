@@ -551,7 +551,7 @@ class MapVis {
             .style("opacity", 0)
             .on("end", function() {
                 d3.select(this)
-                    .html('<span class="pulse-dot"></span> Suggestion: Hover over a country to see your travel chances')
+                    .html('<span class="pulse-dot"></span> Suggestion: Click on a country to see the financial impact of your application')
                     .transition()
                     .duration(1000)
                     .style("opacity", 1)

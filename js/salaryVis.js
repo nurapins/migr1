@@ -52,19 +52,17 @@ class SalaryVis {
             
             d3.select("#salary-value").text(`${salary} EUR`);
             
+            const hoursPerDay = 8;
             const daysInMonth = 22; // approx working days
-            const daysWork = (percentage / 100) * daysInMonth;
-            d3.select("#work-percentage").text(`${daysWork.toFixed(1)} Days`);
+            const totalHoursInMonth = daysInMonth * hoursPerDay;
+            const daysHours = (percentage / 100) * totalHoursInMonth;
+            d3.select("#work-percentage").text(`${daysHours.toFixed(1)} Hours`);
             
             let desc = `In ${countryName}, a single visa application fee (€90) costs about <strong>${percentage.toFixed(1)}%</strong> of the average monthly income. `;
-            if (daysWork >= 1) {
-                desc += `That's equivalent to approximately <strong>${daysWork.toFixed(1)} days</strong> of work just to pay for the application.`;
-            } else {
-                desc += `That's equivalent to about <strong>${(daysWork * 8).toFixed(1)} hours</strong> of work.`;
-            }
+            desc += `That's equivalent to approximately <strong>${daysHours.toFixed(1)} hours</strong> of work just to pay for the application.`;
             d3.select("#salary-description").html(desc);
             
-            vis.renderCountry(countryName, percentage, daysWork, true);
+            vis.renderCountry(countryName, percentage, daysHours, true);
 
             // Return some info about the rendered country to help with the transition
             const feature = vis.geoData.features.find(d => d.properties.name === countryName);
@@ -88,7 +86,7 @@ class SalaryVis {
         return null;
     }
 
-    renderCountry(countryName, percentage, daysWork, skipAnimation = false) {
+    renderCountry(countryName, percentage, daysHours, skipAnimation = false) {
         let vis = this;
 
         // Find GeoJSON feature
@@ -198,11 +196,11 @@ class SalaryVis {
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "middle")
             .attr("fill", "#ffffff")
-            .style("font-size", "24px")
-            .style("font-weight", "800")
+            .style("font-size", "18px")
+            .style("font-weight", "400")
             .style("pointer-events", "none")
             .style("text-shadow", "0 2px 4px rgba(0,0,0,0.5)")
-            .text(daysWork >= 1 ? `${daysWork.toFixed(1)} Days` : `${(daysWork * 8).toFixed(1)} Hours`)
+            .text(`${percentage.toFixed(1)}% of the monthly salary`)
             .style("opacity", 0);
         
         if (!skipAnimation) {

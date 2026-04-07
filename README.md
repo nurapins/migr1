@@ -2,9 +2,18 @@
 
 ## CSC316 Project Overview 
 
-**The Real Cost of Travel** is a data visualization project that explores the global inequality of the Schengen visa system. While the Schengen visa is a significant advancement in international travel, its application process places a disproportionate financial and bureaucratic burden on citizens of developing nations. This project highlights the "visa-free" gap, the multi-million euro non-refundable fees paid by these nations, and the high refusal rates that often come with vague explanations.
+**The Real Cost of Travel** is a data visualization project that explores 
+the global inequality of the Schengen visa system. While the Schengen visa 
+is a significant advancement in international travel,and is great in most cases.
+Its application process places a disproportionate financial 
+and bureaucratic burden on citizens of developing nations. 
+This project highlights relatively high fees for developing nations, the multi-million 
+euro non-refundable fees paid by these nations, and the high 
+refusal rates that often come with vague explanations that don't help legitimate travelers to improve their chances.
 
-By visualizing the relationship between passport power, economic status (local salaries), and visa success rates, we aim to shed light on the invisible barriers that restrict global mobility.
+By visualizing the relationship between passport power, 
+global monthly salaries, and visa success rates, 
+we aim to highlight imperfections in the current travel system.
 
 ## Team Members
 - **Nursultan Nurapin**

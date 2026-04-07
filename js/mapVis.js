@@ -184,6 +184,10 @@ class MapVis {
                     // Start the fly transition
                     vis.flyToSalary(d, this);
                 }
+
+                if (window.visaSimulator) {
+                    window.visaSimulator.setSelectedCountry(countryName);
+                }
             });
 
         // ── Gradient legend ──
@@ -261,7 +265,7 @@ class MapVis {
 
         categoryRows.append("text")
             .attr("x", 22).attr("y", 11)
-            .style("font-family", "'Inter', sans-serif")
+            .style("font-family", "'Plus Jakarta Sans', sans-serif")
             .style("font-size", "11px")
             .style("fill", "#9ca3af")
             .text(d => d.label);
@@ -651,5 +655,15 @@ class MapVis {
                 window.salaryVis.revealCountry();
                 overlay.transition().duration(500).style("opacity", 0).remove();
             });
+    }
+
+    selectCountry(countryName) {
+        const vis = this;
+        vis.countries.attr("stroke", "#1a1a1a").attr("stroke-width", 0.5);
+        
+        vis.countries.filter(d => d.properties.name === countryName)
+            .transition().duration(300)
+            .attr("stroke", "#f97316")
+            .attr("stroke-width", 2);
     }
 }

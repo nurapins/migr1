@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your Project</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     <div id="landing-bg"></div>
     <div class="landing-content">
         <p class="group-name">Nursultan Nurapin, Yuelin Jiang, Sumaid Lakho</p>
-        <h1 class="project-title">The Real Cost of Travel</h1>
+        <h1 class="project-title">The Cost of Exclusion</h1>
         <p class="project-description">
             Schengen visa rejections disproportionately affect African and other nations, creating a multi-million euro burden on developing nations for their desire to travel.
         </p>
@@ -33,7 +33,7 @@
             And you might want to travel across the vast geography of that world.
         </p>
         <p class="passport-hook-line passport-hook-line-3">
-            Maybe the Americas. Maybe <b>Europe </b>.
+            Maybe the Americas. Maybe <span class="accent-line">Europe.</span>
         </p>
         <p class="passport-hook-line passport-hook-line-4">
             But do you think it matters <span class="accent-line">which side of the border</span> you were born in?
@@ -107,17 +107,19 @@
 <section id="explanation" class="transition-page">
     <div class="text-frame">
         <p class="fade-up">
-            Schengen visa allows travellers to only get 1 travel visa to visit almost every European country freely. It is a great idea. <br> <br>However, securing a Schengen visa is a major financial risk for applicants from <b>developing nations</b> . They face relatively high, <b>non-refundable</b> application fees, and if rejected, they receive only a vague explanation with no actionable advice for future applications.        </p>
-        <p class="fade-up">
-            On the next page, you can explore the refusal rates across the globe!
+            Obtaining a Schengen visa is not just a paperwork hurdle—it is a significant <b>financial risk</b> for applicants from many African countries.
         </p>
-        <div class="fade-up" style="margin-top: 40px;">
-            <a href="#map-section" class="btn-primary">Explore the Data</a>
-        </div>
+        <p class="fade-up">
+            While Europeans travel freely, applicants from outside often pay high fees that are <b>never refunded</b>, even if the visa is denied. 
+        </p>
+        <p class="fade-up">
+            High rejection rates for African and other developing nations mean millions of non-refundable fees are transferred to European states without a single travel visa being issued.
+        </p>
     </div>
+    <p class="scroll-hint"><span>Scroll to see the imbalance</span><br><span class="arrow">↓</span></p>
 </section>
 
-<section id="map-section" class="map-page">
+    <section class="map-page">
         <div class="map-header">
             <h2 class="map-main-title">Visa Barriers & Lost Fees</h2>
             <div class="map-controls">
@@ -134,7 +136,7 @@
         <div id="map-vis"></div>
     </section>
 
-<section id="salary-vis-section" class="salary-page" style="background-color: #000000;">
+<section id="salary-vis-section" class="salary-page">
     <div class="salary-header">
         <h2 class="salary-title">The Real Cost: Fee vs. Income</h2>
     </div>
@@ -164,106 +166,85 @@
             Rendering the country shape...
         </div>
     </div>
-    <div class="salary-cta" style="text-align: center; margin-top: 40px;">
-        <a href="#salary-bar-chart-section" class="btn-primary">Explore Global Comparisons</a>
-    </div>
 </section>
 
-<section id="salary-bar-chart-section" class="salary-page" style="background-color: #000000;">
-    <div class="salary-header">
-        <h2 class="salary-title">Explore the cost of a visa application</h2>
-        <p class="salary-description">
-            Here you can explore the relationship between salary and visa costs for different countries more closely. <br>
-            Click on a bar to see continent/country data.
-        </p>
-    </div>
-    <div id="salary-bar-chart-container" style="width: 100%; height: 600px; position: relative;">
-        <a id="back-to-continents" style="display: none; position: absolute; top: 10px; left: 20px; color: #96b2e6; cursor: pointer; text-decoration: underline; z-index: 10;">&larr; Back to Continents</a>
-        <!-- Chart will be rendered here -->
-    </div>
-    <div class="salary-cta" style="text-align: center; margin-top: 40px;">
-        <a href="#fee-explanation-section" class="btn-primary">Analyze EU Revenue Stream</a>
-    </div>
-</section>
-
-<section id="fee-explanation-section" class="transition-page">
-    <div class="text-frame">
-        <h2 class="fade-up" style="font-family: var(--font-heading); color: #ffffff; font-size: 48px; margin-bottom: 30px;">The Revenue from Visas</h2>
-        <p class="fade-up">
-            Visa fees make up a massive source of revenue for the EU. Explore the total fees collected on the next chart
-        </p>
-        <div class="landing-cta fade-up" style="margin-top: 40px;">
-            <a href="#fee-vis-section" class="btn-primary">View Global Revenue</a>
-        </div>
-    </div>
-</section>
-
-<section id="fee-vis-section" style="min-height: 100vh; display: flex; flex-direction: column; background: #000000">
-    <div class="row" style="height: 10vh">
-        <h1 id="fee-vis-title" class="mt-4 text-center" style="color: #ffffff; font-family: var(--font-heading)">The Fee Received by EU</h1>
-    </div>
-    <div id="fee-vis-container" class="row">
-        <div class="col-8">
-            <div id="fee-vis" class="row justify-content-center" style="display: flex; flex-direction: column; min-height: 80vh">
-                <div class="align-self-center" style="flex: 1"></div>
+<section class="slicedRect">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row justify-content-center">
+                    <div class="align-self-center">
+                        <h1>The Total Cost On Visa For Each Country</h1>
+                    </div>
+                </div>
+                <div class="row justify-content-center" style="height: 60vh">
+                    <div class="align-self-center" id="sliced-rect" style="height: 100%; width: 100%"></div>
+                    <div id="tooltip"></div>
+                </div>
+                <div class="row" style="height: 60vh">
+                    <div id="legend"></div>
+                </div>
             </div>
         </div>
-        <div class="col-4 mt-5" style="display: flex; flex-direction: column;">
-            <label style="font-family: var(--font-heading); color: white; font-size: 24px">In
-                <select id="fee-vis-year-selector" class="fee-vis-selector"></select>
+    </div>
+</section>
+<section class="gates">
+    <div class="wrap">
+        <h1>Visa Gate Skyline</h1>
+        <p class="sub">
+            Gates show how “open” a reporting state is, depending on where people apply from.
+            Frame height = applications, blocked area = not issued.
+        </p>
+
+        <div class="controls">
+            <label>Reporting state
+                <select id="state"></select>
             </label>
-            <h4 id="the-many" style="font-family: var(--font-heading); color: white">Countries</h4>
-            <h4 id="the-one" style="font-family: var(--font-heading); color: white">Paid To EU</h4>
-            <div id="fee-vis-region-selector" class="mt-5" style="height: 40vh"></div>
-            <h6 id="fee-vis-total" style="font-family: var(--font-heading); color: white; font-size: 32px">Total: </h6>
-        </div>
-    </div>
-</section>
 
-<section id="refusal-explanation" class="transition-page">
-    <div class="text-frame">
-        <p class="fade-up">
-            It is understandable that many visa refusals occur for valid reasons, such as <b>incomplete applications</b> or fraudulent documentation.
+            <label>Year
+                <select id="year"></select>
+            </label>
+
+            <label>Sort
+                <select id="sort">
+                    <option value="refusal">Refusal rate</option>
+                    <option value="apps">Applications</option>
+                </select>
+            </label>
+
+            <label>Show
+                <select id="topn">
+                    <option value="10">Top 10</option>
+                    <option value="20">Top 20</option>
+                    <option value="30" selected>Top 30</option>
+                    <option value="50">Top 50</option>
+                    <option value="9999">All</option>
+                </select>
+            </label>
+        </div>
+
+        <div id="chart"></div>
+
+        <div class="note">
+            <span class="dot"></span>
+            Labels show country codes (hover for full names). Higher refusal rate → more orange.
+        </div>
+
+        <p class="sub" style="margin-top:10px;font-size:12px;">
+            Source: European Union Visitor Visa Database (Schengen short-stay visa statistics, cleaned time series).
         </p>
-        <p>However, when rejected, the explanation for refusal is always very vague. Try out the visa simulator to see how much you would pay for a visa in different countries.</p>
-
-
-        <div class="visa-simulator fade-up">
-            <button id="apply-visa-btn" class="btn-primary">Apply for a Visa (€90)</button>
-            <div class="counter-container">
-                In <span id="sim-country">the selected country</span>, you've spent: <span id="money-counter">€0</span><br>
-                Equivalent to <span id="work-counter">0.0</span> hours of work.
-            </div>
-            <div id="simulation-result" class="simulation-result"></div>
-            
-            <div class="high-refusal-countries">
-                <p class="sim-hint">Try other countries:</p>
-                <div id="high-refusal-list" class="country-pill-container"></div>
-            </div>
-        </div>
     </div>
 </section>
-
-    <section class="transition-page">
-        <div class="text-frame">
-            <p class="fade-up" style="font-size: 32px; line-height: 1.5; font-weight: 400; font-family: var(--font-heading);">
-                Schengen visa is a great mechanism that allows many of us to travel <b>Europe</b> more freely, however,
-                If many applications are refused automatically or without an extensive reason, prices should be adjusted or
-                clear reasons provided. Clear communication would allow legitimate travelers to correct their mistakes and avoid wasting money on future applications
-            </p>
-        </div>
-    </section>
-
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="js/passportPowerHook.js"></script>
+<script src="js/main.js"></script>
 <script src="js/mapVis.js"></script>
 <script src="js/salaryVis.js"></script>
-<script src="js/salaryBarChart.js"></script>
-<script src="js/feeVis.js"></script>
-<script src="js/visaSimulator.js"></script>
-<script src="js/main.js"></script>
+<script src="js/slicedRect.js"></script>
+<script src="js/gates.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
 </body>
 </html>

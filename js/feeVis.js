@@ -181,11 +181,13 @@ class FeeVis {
             .style("gap", "8px")
             .style("overflow-y", "auto");
 
+        const regionData = ["EU", ...Array.from(vis.schengenCountries).sort()];
         const pills = container.selectAll(".pill")
-            .data(vis.schengenCountries)
+            .data(regionData)
             .enter()
             .append("div")
             .attr("class", "pill")
+            .classed("selected", d => d === window.feeVisRegion)
             .text(d => d);
 
         pills.on("click", function(event, d) {
@@ -244,14 +246,17 @@ class FeeVis {
         }
 
         let totalFee = d3.sum(visData, d => d.fee);
-        d3.select("#" + vis.parentElement + "-total").text("Total: " + totalFee);
+        let totalRejectedFee = d3.sum(visData, d => d.notIssued * vis.fee);
+        let rejectedPercent = totalFee > 0 ? (totalRejectedFee / totalFee) * 100 : 0;
+        let rejectedFee = totalFee*rejectedPercent/100;
+        d3.select("#" + vis.parentElement + "-total").html(`Total: ${totalFee.toLocaleString()} EUR<br><span style="font-size: 0.7em; color: #f97316; opacity: 0.8;">(${rejectedFee.toLocaleString()} EUR / ${rejectedPercent.toFixed(1)}% from rejected visas)</span>`);
         let unitFee = celling6M(d3.max(visData, d => d.fee)) / 24;
         let rectData = visData.map(d => {
             let index = Math.floor(d.fee / unitFee);
             let euro = vis.euro[d3.min([index, 5])];
             let ratio = euro.ratio;
             let path = euro.path;
-            let size = d.fee / totalFee * vis.gArea / visData.length * 8 + 1000;
+            let size = d.fee / totalFee * vis.gArea / (visData.length+12) * 8 + 1000;
             return {
                 text: d.applier,
                 fee: Math.round(d.fee / 1000) / 1000 + "M",
@@ -319,7 +324,7 @@ class FeeVis {
             d3.select(this).select("rect")
                 .transition().duration(200)
                 .style("opacity", 0.5);
-            })
+        })
             .on("mouseout", function () {
                 d3.select(this).select("text")
                     .transition().duration(200)

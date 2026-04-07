@@ -11,7 +11,6 @@ async function init() {
         "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland"
     ]);
 
-    /*
     let areachart;
 
     d3.csv("data/visa_2023_region.csv", d3.autoType).then(function(data){
@@ -19,7 +18,6 @@ async function init() {
 
         areachart.initVis();
     })
-    */
 
     const salaryVis = new SalaryVis("salary-vis", geoData, salaryData);
     window.salaryVis = salaryVis; // Make it globally accessible for MapVis
@@ -132,15 +130,10 @@ async function init() {
             return {
                 reporting_year: values[0].reporting_year,
                 consulate_country: normalizedCountry,
-                visitor_visa_applications: totalApplications,
-                visitor_visa_issued: totalIssued,
-                visitor_visa_not_issued: totalNotIssued,
                 total_applications: totalApplications,
                 total_issued: totalIssued,
                 total_not_issued: totalNotIssued,
-                refusal_rate: refusalRate,
-                consulate_country_region: values[0].consulate_country_region,
-                consulate_country_code: values[0].consulate_country_code
+                refusal_rate: refusalRate
             };
         },
         d => +d.reporting_year,
@@ -155,7 +148,7 @@ async function init() {
     );
 
     const years = [...new Set(adjustedData.map(d => d.reporting_year))].sort(d3.ascending);
-    const defaultYear = 2023;
+    const defaultYear = years[years.length - 1];
 
     const yearSelect = d3.select("#year-select");
 
@@ -167,7 +160,6 @@ async function init() {
         .text(d => d);
 
     yearSelect.property("value", defaultYear);
-    window.currentYear = defaultYear;
 
     const mapVis = new MapVis(
         "map-vis",
@@ -176,9 +168,12 @@ async function init() {
         schengenCountries,
         visaExemptCountries
     );
-    window.mapVis = mapVis; // Make it globally accessible
 
     mapVis.render(defaultYear);
+
+    yearSelect.on("change", function() {
+        mapVis.render(+this.value);
+    });
 
     // ── Entrance Animation Observer ──
     const observerOptions = {
@@ -200,47 +195,6 @@ async function init() {
 
     const animatedSections = document.querySelectorAll('.landing-page, .transition-page, .map-page, .salary-page');
     animatedSections.forEach(section => observer.observe(section));
-
-    // Initialize SalaryBarChart
-    const salaryBarChart = new SalaryBarChart(
-        "salary-bar-chart-container",
-        salaryData,
-        adjustedData,
-        schengenCountries,
-        visaExemptCountries
-    );
-
-    // Initialize FeeVis
-    window.feeVisYear = 2023;
-    window.feeVisLevel = "Country";
-    window.feeVisRegion = "EU"; // Default region
-
-    const feeVis = new FeeVis("fee-vis", geoData, rawData);
-    window.feeVis = feeVis;
-    await feeVis.initVis();
-
-    const visaSimulator = new VisaSimulator(salaryData, adjustedData, schengenCountries, visaExemptCountries);
-    window.visaSimulator = visaSimulator;
-
-    // Populate fee-vis-year-selector
-    d3.select("#fee-vis-year-selector").selectAll("option")
-        .data(years)
-        .enter()
-        .append("option")
-        .attr("value", d => d)
-        .text(d => d);
-    d3.select("#fee-vis-year-selector").property("value", window.feeVisYear);
-
-    d3.select("#fee-vis-year-selector").on("change", function () {
-        window.feeVisYear = +this.value;
-        feeVis.updateVis();
-    });
-
-
-    yearSelect.on("change", function() {
-        window.currentYear = +this.value;
-        mapVis.render(+this.value);
-    });
 
     initLandingVis();
 }

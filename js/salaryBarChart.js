@@ -40,9 +40,9 @@ class SalaryBarChart {
     initVis() {
         let vis = this;
 
-        vis.margin = { top: 50, right: 30, bottom: 180, left: 100 };
+        vis.margin = { top: 50, right: 30, bottom: 170, left: 100 };
         vis.container = d3.select("#" + vis.parentElement);
-        
+
         const containerRect = vis.container.node().getBoundingClientRect();
         vis.width = (containerRect.width || 1000) - vis.margin.left - vis.margin.right;
         vis.height = (containerRect.height || 600) - vis.margin.top - vis.margin.bottom;
@@ -122,7 +122,7 @@ class SalaryBarChart {
         vis.xLabel = vis.svg.append("text")
             .attr("class", "x-label")
             .attr("text-anchor", "middle")
-            .attr("y", vis.height + 130)
+            .attr("y", vis.height + 140)
             .attr("x", vis.width / 2)
             .attr("fill", "#9ca3af")
             .text("Continents");
